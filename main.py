@@ -1,42 +1,111 @@
-from greenhouse import scrape_greenhouse
-from lever import scrape_lever
-from database import create_table, insert_multiple_jobs
+import schedule
+import time
+import logging
+
+from database import (
+    create_tables,
+    insert_company,
+    get_active_companies,
+    insert_job
+)
+
+from universal_scraper import scrape_company
 
 
-def main():
-    create_table()
+# ==============================
+# LOGGING (Internal Only)
+# ==============================
+logging.basicConfig(
+    filename="scraper.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
 
-    all_jobs = []
 
-    # Greenhouse companies
-    greenhouse_companies = [
-        "postman",
-        "stripe"
+# ==============================
+# SEED COMPANIES (RUN ONCE)
+# ==============================
+def seed_companies():
+    greenhouse = [
+        "postman", "stripe", "figma",
+        "coinbase", "databricks",
+        "airbnb", "dropbox"
     ]
 
-    # Lever companies (optional)
-    lever_companies = []
+    lever = [
+        "plaid"
+    ]
 
-    print("\n🔍 Scraping Greenhouse Companies...\n")
+    smart = [
+        "BoschGroup", "Visa"
+    ]
 
-    for company in greenhouse_companies:
-        jobs = scrape_greenhouse(company)
-        print(f"{company.upper()} → {len(jobs)} jobs found")
-        all_jobs.extend(jobs)
+    for slug in greenhouse:
+        insert_company(slug, "greenhouse", slug)
 
-    print("\n🔍 Scraping Lever Companies...\n")
+    for slug in lever:
+        insert_company(slug, "lever", slug)
 
-    for company in lever_companies:
-        jobs = scrape_lever(company)
-        print(f"{company.upper()} → {len(jobs)} jobs found")
-        all_jobs.extend(jobs)
-
-    print(f"\n💾 Saving {len(all_jobs)} jobs to database...\n")
-
-    insert_multiple_jobs(all_jobs)
-
-    print("\n✅ Process Completed Successfully")
+    for slug in smart:
+        insert_company(slug, "smartrecruiters", slug)
 
 
+# ==============================
+# SCRAPER FUNCTION
+# ==============================
+def run_scraper():
+    print("\n🚀 Starting job scrape...\n")
+    logging.info("Scraper started")
+
+    companies = get_active_companies()
+    total_jobs = 0
+
+    for name, platform, slug in companies:
+        try:
+            jobs = scrape_company(name, platform, slug)
+            job_count = len(jobs)
+
+            # Only show successful companies
+            if job_count > 0:
+                print(f"{name} → {job_count} jobs")
+                logging.info(f"{name} → {job_count} jobs")
+
+                for job in jobs:
+                    insert_job(job)
+
+                total_jobs += job_count
+
+        except Exception as e:
+            logging.error(f"{name} failed: {e}")
+            continue
+
+    print(f"\n✅ Total jobs scraped: {total_jobs}\n")
+    logging.info(f"Total jobs scraped: {total_jobs}")
+    logging.info("Scraper finished\n")
+
+
+# ==============================
+# SCHEDULER
+# ==============================
+def start_scheduler():
+    print("⏰ Scheduler started. Running every 6 hours...\n")
+    logging.info("Scheduler initialized")
+
+    # Run immediately once
+    run_scraper()
+
+    # Schedule every 6 hours
+    schedule.every(6).hours.do(run_scraper)
+
+    while True:
+        schedule.run_pending()
+        time.sleep(60)
+
+
+# ==============================
+# ENTRY POINT
+# ==============================
 if __name__ == "__main__":
-    main()
+    create_tables()
+    seed_companies()
+    start_scheduler()

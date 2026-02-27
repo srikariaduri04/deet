@@ -1,0 +1,37 @@
+2026-02-27 22:49:32,325 - INFO - Scheduler initialized
+2026-02-27 22:49:32,325 - INFO - Scraper started
+2026-02-27 22:49:33,769 - INFO - postman \u2192 112 jobs
+2026-02-27 22:49:35,004 - INFO - stripe \u2192 602 jobs
+2026-02-27 22:49:36,179 - INFO - notion \u2192 0 jobs
+2026-02-27 22:49:37,856 - INFO - figma \u2192 171 jobs
+2026-02-27 22:49:39,142 - INFO - coinbase \u2192 242 jobs
+2026-02-27 22:49:41,047 - INFO - databricks \u2192 753 jobs
+2026-02-27 22:49:42,618 - INFO - snowflake \u2192 0 jobs
+2026-02-27 22:49:44,109 - INFO - airbnb \u2192 246 jobs
+2026-02-27 22:49:46,302 - INFO - shopify \u2192 0 jobs
+2026-02-27 22:49:47,615 - INFO - dropbox \u2192 155 jobs
+2026-02-27 22:49:50,816 - INFO - razorpay \u2192 0 jobs
+2026-02-27 22:49:53,053 - INFO - rippling \u2192 0 jobs
+2026-02-27 22:49:55,012 - INFO - vercel \u2192 0 jobs
+2026-02-27 22:50:23,812 - INFO - plaid \u2192 94 jobs
+2026-02-27 22:50:27,072 - INFO - udemy \u2192 0 jobs
+2026-02-27 22:50:30,027 - INFO - BoschGroup \u2192 100 jobs
+2026-02-27 22:50:31,270 - INFO - Visa \u2192 100 jobs
+2026-02-27 22:50:31,445 - INFO - Total jobs scraped: 2575
+2026-02-27 22:50:31,445 - INFO - Scraper finished
+
+2026-02-27 22:54:18,493 - INFO - Scheduler initialized
+2026-02-27 22:54:18,493 - INFO - Scraper started
+2026-02-27 22:54:20,302 - INFO - postman \u2192 112 jobs
+2026-02-27 22:54:24,721 - INFO - stripe \u2192 602 jobs
+2026-02-27 22:54:27,664 - INFO - figma \u2192 171 jobs
+2026-02-27 22:54:29,659 - INFO - coinbase \u2192 242 jobs
+2026-02-27 22:54:31,743 - INFO - databricks \u2192 751 jobs
+2026-02-27 22:54:35,388 - INFO - airbnb \u2192 246 jobs
+2026-02-27 22:54:38,611 - INFO - dropbox \u2192 155 jobs
+2026-02-27 22:55:07,132 - INFO - plaid \u2192 94 jobs
+2026-02-27 22:55:12,210 - INFO - BoschGroup \u2192 100 jobs
+2026-02-27 22:55:13,864 - INFO - Visa \u2192 100 jobs
+2026-02-27 22:55:13,955 - INFO - Total jobs scraped: 2573
+2026-02-27 22:55:13,955 - INFO - Scraper finished
+

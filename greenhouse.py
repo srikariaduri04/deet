@@ -1,36 +1,32 @@
 import requests
 
 
-def scrape_greenhouse(company_slug):
-    url = f"https://boards-api.greenhouse.io/v1/boards/{company_slug}/jobs"
-
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+def scrape_greenhouse(slug):
+    url = f"https://boards-api.greenhouse.io/v1/boards/{slug}/jobs"
 
     try:
-        response = requests.get(url, headers=headers, timeout=15)
-
-        if response.status_code == 404:
-            print(f"[SKIPPED] {company_slug} not found on Greenhouse")
+        response = requests.get(url, timeout=10)
+        if response.status_code != 200:
             return []
 
-        response.raise_for_status()
         data = response.json()
+        if "jobs" not in data:
+            return []
 
-    except Exception as e:
-        print(f"[ERROR] Greenhouse ({company_slug}):", e)
+    except:
         return []
 
     jobs = []
 
     for job in data.get("jobs", []):
         jobs.append({
-            "company": company_slug,
+            "company": slug,
             "title": job.get("title"),
             "location": job.get("location", {}).get("name"),
-            "job_id": job.get("id"),
-            "url": job.get("absolute_url"),
+            "job_type": "Not Specified",
+            "department": "Not Specified",
+            "posted_date": "Not Available",
+            "apply_url": job.get("absolute_url"),
             "platform": "Greenhouse"
         })
 

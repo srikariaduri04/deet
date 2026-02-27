@@ -1,35 +1,32 @@
 import requests
 
 
-def scrape_lever(company_slug):
-    """
-    Scrapes jobs from Lever-based career boards.
-    Example: razorpay
-    """
-
-    url = f"https://api.lever.co/v0/postings/{company_slug}?mode=json"
-
-    headers = {
-        "User-Agent": "Mozilla/5.0"
-    }
+def scrape_lever(slug):
+    url = f"https://api.lever.co/v0/postings/{slug}?mode=json"
 
     try:
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
+        response = requests.get(url, timeout=10)
+        if response.status_code != 200:
+            return []
+
         data = response.json()
-    except Exception as e:
-        print(f"[ERROR] Lever ({company_slug}):", e)
+        if not isinstance(data, list):
+            return []
+
+    except:
         return []
 
     jobs = []
 
     for job in data:
         jobs.append({
-            "company": company_slug,
+            "company": slug,
             "title": job.get("text"),
             "location": job.get("categories", {}).get("location"),
-            "job_id": job.get("id"),
-            "url": job.get("hostedUrl"),
+            "job_type": job.get("categories", {}).get("commitment"),
+            "department": job.get("categories", {}).get("team"),
+            "posted_date": "Not Available",
+            "apply_url": job.get("hostedUrl"),
             "platform": "Lever"
         })
 
